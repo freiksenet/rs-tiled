@@ -38,13 +38,13 @@ pub trait ResourceCache {
     /// # Ok(())
     /// # }
     /// ```
-    fn get_tileset(&self, path: impl AsRef<ResourcePath>) -> Option<Arc<Tileset>>;
+    fn get_tileset(&mut self, path: impl AsRef<ResourcePath>) -> Option<Arc<Tileset>>;
     /// Insert a new tileset into the cache.
     ///
     /// See [`Self::get_tileset()`] for an example.
     fn insert_tileset(&mut self, path: impl AsRef<ResourcePath>, tileset: Arc<Tileset>);
     /// Obtains a template from the cache, if it exists.
-    fn get_template(&self, path: impl AsRef<ResourcePath>) -> Option<Arc<Template>>;
+    fn get_template(&mut self, path: impl AsRef<ResourcePath>) -> Option<Arc<Template>>;
     /// Insert a new template into the cache.
     fn insert_template(&mut self, path: impl AsRef<ResourcePath>, tileset: Arc<Template>);
 }
@@ -69,7 +69,7 @@ impl DefaultResourceCache {
 }
 
 impl ResourceCache for DefaultResourceCache {
-    fn get_tileset(&self, path: impl AsRef<ResourcePath>) -> Option<Arc<Tileset>> {
+    fn get_tileset(&mut self, path: impl AsRef<ResourcePath>) -> Option<Arc<Tileset>> {
         self.tilesets.get(path.as_ref()).map(Clone::clone)
     }
 
@@ -77,7 +77,7 @@ impl ResourceCache for DefaultResourceCache {
         self.tilesets.insert(path.as_ref().to_path_buf(), tileset);
     }
 
-    fn get_template(&self, path: impl AsRef<ResourcePath>) -> Option<Arc<Template>> {
+    fn get_template(&mut self, path: impl AsRef<ResourcePath>) -> Option<Arc<Template>> {
         self.templates.get(path.as_ref()).map(Clone::clone)
     }
 
